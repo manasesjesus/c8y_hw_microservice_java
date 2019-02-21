@@ -1,2 +1,3 @@
-# c8y_ms_java
+# C8Y Microservice example
 Cumulocity microservice example developed using the SDK for Java
+
