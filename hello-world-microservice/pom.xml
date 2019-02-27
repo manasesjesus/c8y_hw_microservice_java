@@ -4,9 +4,16 @@
   <groupId>c8y.example</groupId>
   <artifactId>hello-world-microservice</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>hello-world-microservice</name>
-  <url>http://maven.apache.org</url>
+  
+  <properties>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    <spring-boot-dependencies.version>1.5.7.RELEASE</spring-boot-dependencies.version>
+    <c8y.version>9.16.2</c8y.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -17,7 +24,7 @@
     <dependency>
       <groupId>com.nsn.cumulocity.clients-java</groupId>
       <artifactId>microservice-autoconfigure</artifactId>
-      <version>9.16.2</version>
+      <version>${c8y.version}</version>
     </dependency>
   </dependencies>
   <repositories>
@@ -33,4 +40,53 @@
           <url>http://download.cumulocity.com/maven/repository</url>
       </pluginRepository>
   </pluginRepositories>
+
+  <dependencyManagement>
+    <dependencies>
+        <!-- microservice api -->
+        <dependency>
+            <groupId>com.nsn.cumulocity.clients-java</groupId>
+            <artifactId>microservice-dependencies</artifactId>
+            <version>${c8y.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <version>${spring-boot-dependencies.version}</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>repackage</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>com.nsn.cumulocity.clients-java</groupId>
+            <artifactId>microservice-package-maven-plugin</artifactId>
+            <version>${c8y.version}</version>
+            <executions>
+                <execution>
+                    <id>package</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>package</goal>
+                    </goals>
+                    <configuration>
+                        <name>hello-world</name>
+                        <image>hello-world</image>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+  </build>    
 </project>
