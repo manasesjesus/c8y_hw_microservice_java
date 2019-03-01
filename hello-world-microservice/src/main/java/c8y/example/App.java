@@ -14,7 +14,7 @@ public class App {
     }
 
     @RequestMapping("hello")
-    public String greeting (@RequestParam(value = "who", defaultValue = "World") String who) {
-        return "Hello " + who + "!";
+    public String greeting (@RequestParam(value = "name", defaultValue = "World") String you) {
+        return "Hello " + you + "!";
     }
 }
