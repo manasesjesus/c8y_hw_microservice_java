@@ -80,8 +80,9 @@
                         <goal>package</goal>
                     </goals>
                     <configuration>
-                        <name>hello-world</name>
-                        <image>hello-world</image>
+                        <!-- name for the Docker image -->
+                        <name>hello-world-agent</name>
+                        <image>hello-world-agent</image>
                         <encoding>UTF-8</encoding>
                     </configuration>
                 </execution>
