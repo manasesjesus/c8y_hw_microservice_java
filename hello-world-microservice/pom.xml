@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>c8y.example</groupId>
-  <artifactId>hello-world-microservice</artifactId>
+  <artifactId>hello-world-agent</artifactId>
   <packaging>jar</packaging>
   <version>1.0</version>
-  <name>hello-world-microservice</name>
+  <name>hello-world-agent</name>
   
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
@@ -81,8 +81,8 @@
                     </goals>
                     <configuration>
                         <!-- name for the Docker image -->
-                        <name>hello-world-agent</name>
-                        <image>hello-world-agent</image>
+                        <name>my-first-microservice</name>
+                        <image>my-first-microservice</image>
                         <encoding>UTF-8</encoding>
                     </configuration>
                 </execution>
