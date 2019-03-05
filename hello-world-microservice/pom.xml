@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>c8y.example</groupId>
-  <artifactId>hello-world-agent</artifactId>
+  <artifactId>my-first-microservice</artifactId>
   <packaging>jar</packaging>
   <version>1.0</version>
-  <name>hello-world-agent</name>
+  <name>my-first-microservice</name>
   
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
