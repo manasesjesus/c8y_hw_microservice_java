@@ -12,6 +12,7 @@
     <maven.compiler.target>1.7</maven.compiler.target>
     <spring-boot-dependencies.version>1.5.16.RELEASE</spring-boot-dependencies.version>
     <c8y.version>9.16.2</c8y.version>
+    <microservice.name>my-first-microservice</microservice.name>
   </properties>
 
   <dependencies>
@@ -80,9 +81,8 @@
                         <goal>package</goal>
                     </goals>
                     <configuration>
-                        <!-- name for the Docker image -->
-                        <name>my-first-microservice</name>
-                        <image>my-first-microservice</image>
+                        <name>${microservice.name}</name>
+                        <image>${microservice.name}</image>
                         <encoding>UTF-8</encoding>
                     </configuration>
                 </execution>
