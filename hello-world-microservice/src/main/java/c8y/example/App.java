@@ -16,11 +16,19 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
+    /**
+     * TODO: Javadoc
+     */
     @RequestMapping("hello")
     public String greeting (@RequestParam(value = "name", defaultValue = "World") String you) {
         return "Hello " + you + "!";
     }
 
+    // TODO: @RequestMapping("/") redirect to hello
+
+    /**
+     * TODO: Javadoc
+     */
     @RequestMapping("environment")
     public Map<String, String> environment () {
         Map<String, String> env = System.getenv();
