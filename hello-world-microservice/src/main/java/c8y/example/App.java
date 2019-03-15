@@ -61,7 +61,13 @@ public class App {
         return "Hello " + you + "!";
     }
 
-    // TODO: @RequestMapping("/") redirect to hello
+    /**
+     * TODO: Javadoc
+     */
+    @RequestMapping("/") 
+    public String root () {
+        return greeting("World");
+    }
 
     /**
      * TODO: Javadoc
