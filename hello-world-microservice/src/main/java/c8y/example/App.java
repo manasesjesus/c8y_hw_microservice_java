@@ -77,11 +77,13 @@ public class App {
         Map<String, String> env = System.getenv();
         Map<String, String> map = new HashMap<>();
 
-        map.put("Microservice", env.get("C8Y_BOOTSTRAP_USER").substring(17));
+        map.put("app_name", env.get("APPLICATION_NAME"));
+        map.put("type", "Microservice");
         map.put("URL", env.get("C8Y_BASEURL"));
-        map.put("JDK Version", env.get("JAVA_VERSION"));
-        map.put("Tenant", env.get("C8Y_BOOTSTRAP_TENANT"));
-        map.put("Isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
+        map.put("JDK", env.get("JAVA_VERSION"));
+        map.put("tenant", env.get("C8Y_BOOTSTRAP_TENANT"));
+        map.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
+        map.put("memory", env.get("MEMORY_LIMIT"));
 
         return map;
     }
