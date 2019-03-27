@@ -5,6 +5,8 @@ import java.util.Map;
 // import java.util.concurrent.Callable;
 
 import com.cumulocity.microservice.autoconfigure.MicroserviceApplication;
+import com.cumulocity.microservice.health.annotation.EnableHealthIndicator;
+
 /*import com.cumulocity.microservice.context.ContextService;
 import com.cumulocity.microservice.context.credentials.MicroserviceCredentials;
 import com.cumulocity.microservice.context.inject.TenantScope;
@@ -85,6 +87,16 @@ public class App {
         map.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
         map.put("memory", env.get("MEMORY_LIMIT"));
 
+        return map;
+    }
+
+    
+    @RequestMapping("healthcheck") 
+    public Map<String, String> healthcheck () {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("status", "up and running");
+        
         return map;
     }
 }
