@@ -6,6 +6,8 @@
     },
       "isolation": "MULTI_TENANT",
       "requiredRoles": [
+        "ROLE_INVENTORY_READ",
+        
         "ROLE_APPLICATION_MANAGEMENT_ADMIN",
         "ROLE_MEASUREMENT_ADMIN",
         "ROLE_INVENTORY_ADMIN",
@@ -16,6 +18,8 @@
         "ROLE_ALARM_ADMIN"
       ],
       "roles": [
+        "ROLE_CUSTOM_MICROSERVICE",
+
         "ROLE_APPLICATION_MANAGEMENT_ADMIN",
         "ROLE_MEASUREMENT_ADMIN",
         "ROLE_INVENTORY_ADMIN",
