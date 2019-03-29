@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class App {
 
     private static Map<String, String> C8Y_ENV = null;
-    private Platform platform = new PlatformImpl("<<URL>>", new CumulocityCredentials("<<user>>", "<<passwd>>"));
+    private static Platform platform;
 
     public static void main (String[] args) {
         SpringApplication.run(App.class, args);
 
-        C8Y_ENV = getEnvironmentValues();
+        C8Y_ENV  = getEnvironmentValues();
+        platform = new PlatformImpl("<URL>", new CumulocityCredentials("<user>", "<passwd>"));
     }
 
     /** 
