@@ -26,9 +26,6 @@ public class App {
         return "Hello " + you + "!";
     }
 
-    /**
-     * TODO: Javadoc
-     */
     @RequestMapping("/") 
     public String root () {
         return greeting("World");
