@@ -14,7 +14,7 @@
         "ROLE_EVENT_READ",
         "ROLE_EVENT_ADMIN",
         "ROLE_ALARM_READ",
-        "ROLE_ALARM_CREATE",
+        
         "ROLE_ALARM_ADMIN"
       ],
       "roles": [
@@ -26,7 +26,7 @@
         "ROLE_EVENT_READ",
         "ROLE_EVENT_ADMIN",
         "ROLE_ALARM_READ",
-        "ROLE_ALARM_CREATE",
+        
         "ROLE_ALARM_ADMIN"
       ]
   }
