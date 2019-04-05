@@ -7,6 +7,7 @@ import com.cumulocity.microservice.autoconfigure.MicroserviceApplication;
 import com.cumulocity.model.authentication.CumulocityCredentials;
 import com.cumulocity.sdk.client.Platform;
 import com.cumulocity.sdk.client.PlatformImpl;
+import com.cumulocity.sdk.client.user.UserApi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,17 @@ public class App {
         SpringApplication.run(App.class, args);
 
         C8Y_ENV  = getEnvironmentValues();
-        platform = new PlatformImpl("<URL>", new CumulocityCredentials("<user>", "<passwd>"));
+        // platform = new PlatformImpl("<URL>", new CumulocityCredentials("<user>", "<passwd>"));
+
+
+
+        System.out.println("platform >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ");
+        
+        UserApi userApi = platform.getUserApi();
+
+        System.out.println(userApi.getCurrentUser());
+
+        System.out.println();
     }
 
     /** 
@@ -41,8 +52,10 @@ public class App {
         map.put("tenant", env.get("C8Y_BOOTSTRAP_TENANT"));
         map.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
         map.put("memory", env.get("MEMORY_LIMIT"));
+        map.put("user", env.get("C8Y_USER"));
+        
 
-        return map;
+        return env;
     }
 
 
