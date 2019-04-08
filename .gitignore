@@ -16,3 +16,6 @@ buildNumber.properties
 hello-world-microservice/.classpath
 hello-world-microservice/.project
 commands.sh
+
+# platform credentials
+credentials.properties
