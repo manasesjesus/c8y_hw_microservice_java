@@ -6,15 +6,14 @@ import java.io.Reader;
 import java.util.Properties;
 
 public class Credentials {
-    // Credentials
-    public String USERNAME;
-    public String PASSWD;
-    public String URL;
+    public static String USERNAME;
+    public static String PASSWD;
+    public static String URL;
 
-    public Credentials () {
+    public static void loadCredentials () {
         try {
             Properties props   = new Properties();
-            Reader credentials = new FileReader("resources/credentials.properties");
+            Reader credentials = new FileReader("/etc/my-first-microservice/credentials.properties");
 
             props.load(credentials);
             USERNAME = props.getProperty("c8y.tenant.id") + "/" + props.getProperty("c8y.username");
@@ -22,7 +21,7 @@ public class Credentials {
             URL    = props.getProperty("c8y.url");
 
         } catch (IOException e) {
-            System.err.println("[ERROR] Unable to load the user credentials");
+            System.err.println("[ABORT] Unable to load the user credentials");
             System.exit(007); 
         }        
     }
