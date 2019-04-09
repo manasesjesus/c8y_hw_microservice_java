@@ -32,8 +32,7 @@ public class App {
         // Load environment values
         C8Y_ENV  = getEnvironmentValues();
 
-        try
-        {
+        try {
             // Load platform credentials
             loadCredentials();            
 
@@ -46,7 +45,6 @@ public class App {
 
             // Verify if the current user can create alarms
             canCreateAlarms = currentUser.getEffectiveRoles().toString().indexOf("ROLE_ALARM_ADMIN") != -1;
-            C8Y_ENV.put("canCreateAlarms", canCreateAlarms ? "yes" : "no");
         }
         catch (IOException ioe) {
             System.err.println("[ERROR] Unable to load the user credentials!");
