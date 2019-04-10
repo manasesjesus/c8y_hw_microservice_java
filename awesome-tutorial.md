@@ -17,3 +17,4 @@ Sounds exiting? Let's the fun begin.
 
 ### Device creation
 
+create the managedObjects using the API
