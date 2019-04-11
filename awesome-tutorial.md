@@ -17,4 +17,7 @@ Sounds exiting? Let's the fun begin.
 
 ### Device creation
 
-create the managedObjects using the API
+create the decive managedObjects using the API
+
+
+explain what it does/have the option to be tracked
