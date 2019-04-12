@@ -9,20 +9,18 @@ public class Credentials {
     public static String USERNAME;
     public static String PASSWD;
     public static String URL;
+    
+    public static String IPSTACK_KEY;
 
-    public static void loadCredentials () {
-        try {
-            Properties props   = new Properties();
-            Reader credentials = new FileReader("/etc/my-first-microservice/credentials.properties");
+    public static void loadCredentials () throws IOException {
+        Properties props   = new Properties();
+        Reader credentials = new FileReader("/etc/my-first-microservice/credentials.properties");
 
-            props.load(credentials);
-            USERNAME = props.getProperty("c8y.tenant.id") + "/" + props.getProperty("c8y.username");
-            PASSWD = props.getProperty("c8y.passwd");
-            URL    = props.getProperty("c8y.url");
-
-        } catch (IOException e) {
-            System.err.println("[ABORT] Unable to load the user credentials");
-            System.exit(007); 
-        }        
+        props.load(credentials);
+        USERNAME = props.getProperty("c8y.tenant.id") + "/" + props.getProperty("c8y.username");
+        PASSWD   = props.getProperty("c8y.passwd");
+        URL      = props.getProperty("c8y.url");
+        
+        IPSTACK_KEY = props.getProperty("ipstack.key");
     }
 }

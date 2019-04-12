@@ -2,19 +2,26 @@ package c8y.example;
 
 import static c8y.example.Credentials.loadCredentials;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.cumulocity.microservice.autoconfigure.MicroserviceApplication;
 import com.cumulocity.model.authentication.CumulocityCredentials;
+import com.cumulocity.rest.representation.user.CurrentUserRepresentation;
 import com.cumulocity.sdk.client.Platform;
 import com.cumulocity.sdk.client.PlatformImpl;
-import com.cumulocity.sdk.client.user.UserApi;
+import com.cumulocity.sdk.client.SDKException;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import net.minidev.json.JSONObject;
 
 @MicroserviceApplication
 @RestController
@@ -22,28 +29,38 @@ public class App {
 
     private static Map<String, String> C8Y_ENV = null;
     private static Platform platform;
+    private static boolean canCreateAlarms = false;
 
     public static void main (String[] args) {
         SpringApplication.run(App.class, args);
 
-        // Load platform credentials
-        loadCredentials();
-
         // Load environment values
         C8Y_ENV  = getEnvironmentValues();
 
-        // Connect to the platform
-        platform = new PlatformImpl(Credentials.URL, new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
-        
-        // Get current user
-        UserApi userApi = platform.getUserApi();
+        try {
+            // Load platform credentials
+            loadCredentials();
 
-        // Add current user to the environment values
-        C8Y_ENV.put("username", userApi.getCurrentUser().getUserName());
+            // Connect to the platform
+            platform = new PlatformImpl(Credentials.URL, new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
+            
+            // Add current user to the environment values
+            CurrentUserRepresentation currentUser = platform.getUserApi().getCurrentUser();
+            C8Y_ENV.put("username", currentUser.getUserName());
 
-        // Verify if the current user can read the subscriptions
-        //System.out.println(userApi.getCurrentUser().getEffectiveRoles());
+            // Verify if the current user can create alarms
+            canCreateAlarms = currentUser.getEffectiveRoles().toString().indexOf("ROLE_ALARM_ADMIN") != -1;
+        }
+        catch (IOException ioe) {
+            System.err.println("[ERROR] Unable to load the user credentials!");
+        }
+        catch (SDKException sdke) {
+            if (sdke.getHttpStatus() == 401) {
+                System.err.println("[ERROR] Security/Unauthorized. Invalid credentials!");
+            }
+        }
 
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println();
     }
 
@@ -79,10 +96,22 @@ public class App {
         return greeting("World");
     }
 
-    // Return the environment variables of the container 
+    // Return the environment values
     @RequestMapping("environment")
     public Map<String, String> environment () {
         return C8Y_ENV;
+    }
+
+    @RequestMapping("track/locations")
+    public JSONObject processData(HttpServletRequest request) {
+        // Get public IP address
+        String ip = request.getHeader("x-real-ip");
+
+        // Get location details from ipstack 
+        RestTemplate rest = new RestTemplate();
+        Location location = rest.getForObject("http://api.ipstack.com/" + ip + "?access_key=" + Credentials.IPSTACK_KEY, Location.class);
+
+        return location.toJSON();
     }
 
     @RequestMapping("subscriptions")
