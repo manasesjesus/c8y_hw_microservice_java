@@ -9,6 +9,8 @@ public class Credentials {
     public static String USERNAME;
     public static String PASSWD;
     public static String URL;
+    
+    public static String IPSTACK_KEY;
 
     public static void loadCredentials () throws IOException {
         Properties props   = new Properties();
@@ -16,7 +18,9 @@ public class Credentials {
 
         props.load(credentials);
         USERNAME = props.getProperty("c8y.tenant.id") + "/" + props.getProperty("c8y.username");
-        PASSWD = props.getProperty("c8y.passwd");
-        URL    = props.getProperty("c8y.url");
+        PASSWD   = props.getProperty("c8y.passwd");
+        URL      = props.getProperty("c8y.url");
+        
+        IPSTACK_KEY = props.getProperty("ipstack.key");
     }
 }
