@@ -21,7 +21,8 @@ public class Location {
 
         location.put("c8y_Position", c8y_Position);
         location.put("type", "c8y_LocationUpdate");
-        location.put("text", "Accessed from " + ip + " (" + this.city + ", " + this.country_code + ")");
+        location.put("text", "Accessed from " + ip + 
+                             " (" + (this.city != null ? this.city + ", " : "") + this.country_code + ")");
 
         return location;
     }
