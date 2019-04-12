@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.cumulocity.microservice.autoconfigure.MicroserviceApplication;
 import com.cumulocity.model.authentication.CumulocityCredentials;
 import com.cumulocity.rest.representation.user.CurrentUserRepresentation;
@@ -17,6 +19,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import net.minidev.json.JSONObject;
 
 @MicroserviceApplication
 @RestController
@@ -34,7 +39,7 @@ public class App {
 
         try {
             // Load platform credentials
-            loadCredentials();            
+            loadCredentials();
 
             // Connect to the platform
             platform = new PlatformImpl(Credentials.URL, new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
@@ -55,6 +60,7 @@ public class App {
             }
         }
 
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println();
     }
 
@@ -94,6 +100,18 @@ public class App {
     @RequestMapping("environment")
     public Map<String, String> environment () {
         return C8Y_ENV;
+    }
+
+    @RequestMapping("track/locations")
+    public JSONObject processData(HttpServletRequest request) {
+        // Get public IP address
+        String ip = request.getHeader("x-real-ip");
+
+        // Get location details from ipstack 
+        RestTemplate rest = new RestTemplate();
+        Location location = rest.getForObject("http://api.ipstack.com/" + ip + "?access_key=" + Credentials.IPSTACK_KEY, Location.class);
+
+        return location.toJSON();
     }
 
     @RequestMapping("subscriptions")
