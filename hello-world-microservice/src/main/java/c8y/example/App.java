@@ -100,7 +100,7 @@ public class App {
 
     // Return the environment values
     @RequestMapping("environment")
-    public Map<String, String> environment() {
+    public Map<String, String> environment () {
         return C8Y_ENV;
     }
 
