@@ -89,7 +89,7 @@ public class App {
 
     // Greeting endpoints
     @RequestMapping("hello")
-    public String greeting(@RequestParam(value = "name", defaultValue = "World") String you) {
+    public String greeting (@RequestParam(value = "name", defaultValue = "World") String you) {
         return "Hello " + you + "!";
     }
 
