@@ -70,7 +70,7 @@ public class App {
     /**
      * Get the environment variables of the container
      */
-    private static Map<String, String> getEnvironmentValues() {
+    private static Map<String, String> getEnvironmentValues () {
         Map<String, String> env = System.getenv();
         Map<String, String> map = new HashMap<>();
 
