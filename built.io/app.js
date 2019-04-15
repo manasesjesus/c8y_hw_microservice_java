@@ -1,8 +1,10 @@
-var request = require("request");
+const request = require("request");
 
-var credentials  = $config.params.username + ":" + $config.params.password;
-var headerOption = {
-    "url" : $config.params.health_endpoint,
+const credentials = $config.params.username + ":" + $config.params.password;
+const ms_endpoint = $config.params.server + "/service/" + $config.params.microservice + "/health";
+
+const headerOption = {
+    "url" : ms_endpoint,
     "headers" : {
       "Authorization" : "Basic " + new Buffer(credentials).toString("base64"),
       "Accept" : "application/json"
@@ -15,10 +17,10 @@ request(headerOption, function (error, response, body) {
 
     if (status === undefined || status !== "UP") {
         console.log("[ERROR]: The microservice is not up and running...");
-        $export(null, { healthy : false });
+        $export(null, { microservice : $config.params.microservice, healthy : false });
     }
     else {
-        $export(null, { healthy : true });
+        $export(null, { microservice : $config.params.microservice, healthy : true });
     }
 
 });
