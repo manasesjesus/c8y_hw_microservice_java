@@ -53,7 +53,7 @@ public class App {
 
             // Verify if the current user can create alarms
             canCreateAlarms = currentUser.getEffectiveRoles().toString().indexOf("ROLE_ALARM_ADMIN") != -1;
-            
+
         } catch (IOException ioe) {
             System.err.println("[ERROR] Unable to load the user credentials!");
         } catch (SDKException sdke) {
@@ -120,15 +120,15 @@ public class App {
         c8y_Position.put("lng", location.getLongitude());
 
         ManagedObjectRepresentation source = new ManagedObjectRepresentation();
-        source.setId(GId.asGId("1400"));                    // The ID of "My Tracker"
+        source.setId(GId.asGId("1400"));              // The ID of "My Tracker"
 
         EventRepresentation event = new EventRepresentation();
         event.setSource(source);
         event.setProperty("c8y_Position", c8y_Position);
         event.setType("c8y_LocationUpdate");
         event.setDateTime(new DateTime(System.currentTimeMillis()));
-        event.setText("Accessed from " + ip + " (" + (location.getCity() != null ? location.getCity() + ", " : "")
-                + location.getCountry_code() + ")");
+        event.setText("Accessed from " + ip + 
+                      " (" + (location.getCity() != null ? location.getCity() + ", " : "") + location.getCountry_code() + ")");
         
         // Create the event in the platform
         platform.getEventApi().create(event);
