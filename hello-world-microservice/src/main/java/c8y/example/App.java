@@ -34,7 +34,7 @@ public class App {
     private static Platform platform;
     private static boolean canCreateAlarms = false;
 
-    public static void main(String[] args) {
+    public static void main (String[] args) {
         SpringApplication.run(App.class, args);
 
         // Load environment values
@@ -45,8 +45,7 @@ public class App {
             loadCredentials();
 
             // Connect to the platform
-            platform = new PlatformImpl(Credentials.URL,
-                    new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
+            platform = new PlatformImpl(Credentials.URL, new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
 
             // Add current user to the environment values
             CurrentUserRepresentation currentUser = platform.getUserApi().getCurrentUser();
@@ -54,6 +53,7 @@ public class App {
 
             // Verify if the current user can create alarms
             canCreateAlarms = currentUser.getEffectiveRoles().toString().indexOf("ROLE_ALARM_ADMIN") != -1;
+            
         } catch (IOException ioe) {
             System.err.println("[ERROR] Unable to load the user credentials!");
         } catch (SDKException sdke) {
