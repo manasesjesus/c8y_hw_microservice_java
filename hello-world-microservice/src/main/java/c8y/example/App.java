@@ -94,7 +94,7 @@ public class App {
     }
 
     @RequestMapping("/")
-    public String root() {
+    public String root () {
         return greeting("World");
     }
 
