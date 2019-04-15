@@ -1,7 +1,6 @@
 package c8y.example;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import net.minidev.json.JSONObject;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Location {
@@ -10,41 +9,6 @@ public class Location {
     private String country_code;
     private String latitude;
     private String longitude;
-    private String ip;
-
-    public JSONObject toJSON () {
-        JSONObject location     = new JSONObject();
-        JSONObject c8y_Position = new JSONObject();
-
-        c8y_Position.put("lat", this.latitude);
-        c8y_Position.put("lng", this.longitude);
-
-        location.put("c8y_Position", c8y_Position);
-        location.put("type", "c8y_LocationUpdate");
-        location.put("text", "Accessed from " + ip + 
-                             " (" + (this.city != null ? this.city + ", " : "") + this.country_code + ")");
-
-        return location;
-    }
-
-    @Override
-    public String toString() {
-        return this.toJSON().toJSONString();
-    }
-
-    /**
-     * @return the ip
-     */
-    public String getIp() {
-        return ip;
-    }
-
-    /**
-     * @param ip the ip to set
-     */
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
 
     /**
      * @return the longitude
