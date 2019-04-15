@@ -105,7 +105,7 @@ public class App {
     }
 
     @RequestMapping("track/locations")
-    public String processData(HttpServletRequest request) {
+    public String processData (HttpServletRequest request) {
         // Get public IP address
         String ip = request.getHeader("x-real-ip");
 
