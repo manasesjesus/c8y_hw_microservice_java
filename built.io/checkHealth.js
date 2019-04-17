@@ -16,7 +16,6 @@ request(options, function (error, response, body) {
     let status = JSON.parse(body).status;
 
     if (status === undefined || status !== "UP") {
-        console.log("[ERROR]: The microservice is not up and running...");
         $export(null, { microservice : $config.params.microservice, healthy : false });
     }
     else {
