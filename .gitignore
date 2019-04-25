@@ -13,8 +13,7 @@ buildNumber.properties
 
 .vscode/
 .settings/
-hello-world-microservice/.classpath
-hello-world-microservice/.project
+.project
 commands.sh
 node_modules/
 
