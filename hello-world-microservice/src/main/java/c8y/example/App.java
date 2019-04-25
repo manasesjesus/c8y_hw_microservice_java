@@ -32,7 +32,6 @@ import net.minidev.json.JSONObject;
 public class App {
 
     private static Platform platform;
-    private static boolean canCreateAlarms;
 
     private static Map<String, String> C8Y_ENV = null;
     private static String trackerId = "1400";           // The ID of "My Tracker"
@@ -51,12 +50,12 @@ public class App {
             platform = new PlatformImpl(Credentials.URL, new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
 
             // Add current user to the environment values
-            UserApi user = platform.getUserApi();
-            CurrentUserRepresentation currentUser = user.getCurrentUser();
+            var user = platform.getUserApi();
+            var currentUser = user.getCurrentUser();
             C8Y_ENV.put("username", currentUser.getUserName());
 
             // Verify if the current user can create alarms
-            canCreateAlarms = false;
+            var canCreateAlarms = false;
             for (Object role : currentUser.getEffectiveRoles()) {
                 if (((HashMap) role).get("id").equals("ROLE_ALARM_ADMIN")) {
                     canCreateAlarms = true;
@@ -82,8 +81,8 @@ public class App {
      * Get the environment variables of the container
      */
     private static Map<String, String> getEnvironmentValues () {
-        Map<String, String> env = System.getenv();
-        Map<String, String> map = new HashMap<>();
+        var env = System.getenv();
+        var map = new HashMap<String, String>();
 
         map.put("app_name", env.get("APPLICATION_NAME"));
         map.put("type", "Microservice");
@@ -105,18 +104,18 @@ public class App {
     public EventRepresentation createLocationUpdateEvent (String ip) {
 
         // Get location details from ipstack
-        RestTemplate rest = new RestTemplate();
-        Location location = rest.getForObject("http://api.ipstack.com/" + ip + "?access_key=" + Credentials.IPSTACK_KEY, Location.class);
+        var rest = new RestTemplate();
+        var location = rest.getForObject("http://api.ipstack.com/" + ip + "?access_key=" + Credentials.IPSTACK_KEY, Location.class);
 
         // Prepare a LocationUpdate event using Cumulocity's API
-        JSONObject c8y_Position = new JSONObject();
+        var c8y_Position = new JSONObject();
         c8y_Position.put("lat", location.getLatitude());
         c8y_Position.put("lng", location.getLongitude());
 
-        ManagedObjectRepresentation source = new ManagedObjectRepresentation();
+        var source = new ManagedObjectRepresentation();
         source.setId(GId.asGId(trackerId));
 
-        EventRepresentation event = new EventRepresentation();
+        var event = new EventRepresentation();
         event.setSource(source);
         event.setType("c8y_LocationUpdate");
         event.setDateTime(new DateTime(System.currentTimeMillis()));
