@@ -6,9 +6,10 @@
   <name>my-first-microservice</name>
   <artifactId>my-first-microservice</artifactId>
   <properties>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-    <spring-boot-dependencies.version>1.5.16.RELEASE</spring-boot-dependencies.version>
+    <java.version>12</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <spring-boot-dependencies.version>2.1.4.RELEASE</spring-boot-dependencies.version>
     <c8y.version>9.16.2</c8y.version>
     <microservice.name>my-first-microservice</microservice.name>
   </properties>
