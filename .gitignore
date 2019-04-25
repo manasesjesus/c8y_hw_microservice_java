@@ -11,11 +11,13 @@ buildNumber.properties
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
 
+# platform credentials
+credentials.properties
+
+# others
 .vscode/
 .settings/
 .project
+.classpath
 commands.sh
 node_modules/
-
-# platform credentials
-credentials.properties
