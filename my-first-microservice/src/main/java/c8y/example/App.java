@@ -71,7 +71,7 @@ public class App {
 
         } catch (IOException ioe) {
             System.err.println("[ERROR] Unable to load the user credentials!");
-        } catch (SDKException  sdke) {
+        } catch (SDKException sdke) {
             if (sdke.getHttpStatus() == 401) {
                 System.err.println("[ERROR] Security/Unauthorized. Invalid credentials!");
             }
