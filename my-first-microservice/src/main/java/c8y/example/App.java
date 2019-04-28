@@ -3,9 +3,18 @@ package c8y.example;
 import static c8y.example.Credentials.loadCredentials;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
+import org.joda.time.DateTime;
+import org.springframework.boot.SpringApplication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.cumulocity.microservice.autoconfigure.MicroserviceApplication;
 import com.cumulocity.model.authentication.CumulocityCredentials;
@@ -15,13 +24,7 @@ import com.cumulocity.rest.representation.inventory.ManagedObjectRepresentation;
 import com.cumulocity.sdk.client.Platform;
 import com.cumulocity.sdk.client.PlatformImpl;
 import com.cumulocity.sdk.client.SDKException;
-
-import org.joda.time.DateTime;
-import org.springframework.boot.SpringApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import com.cumulocity.sdk.client.event.EventFilter;
 
 import net.minidev.json.JSONObject;
 
@@ -157,10 +160,23 @@ public class App {
         return createLocationUpdateEvent(request.getHeader("x-real-ip")).toJSON();
     }
 
-    // Return the IPs and places
+    // Get the tracked IPs and locations
     @RequestMapping("location/locations")
-    public String getLocations () {
-
-        return null;
+    public ArrayList<Object> getLocations (@RequestParam(value = "max", defaultValue = "5") int max) {
+    	var locations = new ArrayList<Object>();
+    	var filter = new EventFilter().byType("c8y_LocationUpdate");
+        var eventCollection = platform.getEventApi().getEventsByFilter(filter).get(max);
+    	
+        eventCollection.getEvents().forEach((event) -> {
+        	var map = new HashMap<String, Object>();
+        	
+        	map.put("ip", event.getProperty("ip"));
+        	map.put("coordinates", event.getProperty("c8y_Position"));
+        	map.put("when", event.getCreationDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+        	
+        	locations.add(map);
+        });
+    	
+        return locations;
     }
 }
