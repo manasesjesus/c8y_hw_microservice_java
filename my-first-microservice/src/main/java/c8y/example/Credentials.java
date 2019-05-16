@@ -17,8 +17,8 @@ public class Credentials {
 
         props.load(credentials);
         
-        USERNAME = props.getProperty("c8y.tenant.id") + "/" + props.getProperty("c8y.username");
-        PASSWD   = props.getProperty("c8y.passwd");
+        USERNAME = props.getProperty("c8y.bootstrap.tenant") + "/" + props.getProperty("c8y.bootstrap.user");
+        PASSWD   = props.getProperty("c8y.bootstrap.password");
         URL      = props.getProperty("c8y.url");
         
         IPSTACK_KEY = props.getProperty("ipstack.key");
