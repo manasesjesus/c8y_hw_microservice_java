@@ -48,7 +48,7 @@ public class App {
             // Load platform credentials
             loadCredentials();
 
-            // Connect to the platform
+            // Login to the platform
             platform = new PlatformImpl(Credentials.URL, new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
 
             // Add current user to the environment values
