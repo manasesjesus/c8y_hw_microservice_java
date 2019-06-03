@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import com.cumulocity.microservice.autoconfigure.MicroserviceApplication;
 import com.cumulocity.model.authentication.CumulocityCredentials;
 import com.cumulocity.model.idtype.GId;
+import com.cumulocity.rest.representation.alarm.AlarmRepresentation;
 import com.cumulocity.rest.representation.event.EventRepresentation;
 import com.cumulocity.rest.representation.inventory.ManagedObjectRepresentation;
 import com.cumulocity.sdk.client.Platform;
@@ -64,11 +65,21 @@ public class App {
                 }
             } 
 
-            // TODO: add a subscriptions listener here
+            // Create a warning alarm
             if (canCreateAlarms) {
-                // Create a WARNING alarm for new subscriptions to the microservice
+            	var source = new ManagedObjectRepresentation();
+                source.setId(GId.asGId(trackerId));
+            	
+            	var alarm = new AlarmRepresentation();
+            	alarm.setSeverity("WARNING");
+            	alarm.setSource(source);
+            	alarm.setType("c8y_Application__Microservice_started");
+            	alarm.setText("The microservice " + C8Y_ENV.get("app_name") + " has been started");
+            	alarm.setStatus("ACTIVE");
+            	alarm.setDateTime(new DateTime(System.currentTimeMillis()));
+            	
+                platform.getAlarmApi().create(alarm);
             }
-
         } catch (IOException ioe) {
             System.err.println("[ERROR] Unable to load the user credentials!");
         } catch (SDKException sdke) {
@@ -76,7 +87,6 @@ public class App {
                 System.err.println("[ERROR] Security/Unauthorized. Invalid credentials!");
             }
         }
-
     }
 
     /**
@@ -107,7 +117,8 @@ public class App {
 
         // Get location details from ipstack
         var rest = new RestTemplate();
-        var location = rest.getForObject("http://api.ipstack.com/" + ip + "?access_key=" + Credentials.IPSTACK_KEY, Location.class);
+        var apiURL = "http://api.ipstack.com/" + ip + "?access_key=" + Credentials.IPSTACK_KEY;
+        var location = rest.getForObject(apiURL, Location.class);
 
         // Prepare a LocationUpdate event using Cumulocity's API
         var c8y_Position = new JSONObject();
