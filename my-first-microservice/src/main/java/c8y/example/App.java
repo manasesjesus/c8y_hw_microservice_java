@@ -49,7 +49,7 @@ public class App {
             loadCredentials();
 
             // Login to the platform
-            platform = new PlatformImpl(Credentials.URL, new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
+            platform = new PlatformImpl(C8Y_ENV.get("url"), new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
 
             // Add current user to the environment values
             var user = platform.getUserApi();
@@ -88,6 +88,7 @@ public class App {
 
         map.put("app_name", env.get("APPLICATION_NAME"));
         map.put("type", "Microservice");
+        map.put("url", env.get("C8Y_BASEURL"));
         map.put("jdk", env.get("JAVA_VERSION"));
         map.put("tenant", env.get("C8Y_BOOTSTRAP_TENANT"));
         map.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
