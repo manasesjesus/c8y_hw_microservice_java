@@ -33,53 +33,49 @@ import net.minidev.json.JSONObject;
 @RestController
 public class App {
 
-    private static Platform platform;
+    private Platform platform;
+    private Map<String, String> C8Y_ENV = new HashMap<String, String>();
+    private String trackerId = "1400";           // The ID of "My Tracker"
 
-    private static Map<String, String> C8Y_ENV = null;
-    private static String trackerId = "1400";           // The ID of "My Tracker"
-
-    @SuppressWarnings("rawtypes")
 	public static void main (String[] args) {
         SpringApplication.run(App.class, args);
 
-        // Load environment values
-        C8Y_ENV = getEnvironmentValues();
+        App microservice = new App();
+        
+        microservice.subsetEnvironmentValues();
+        microservice.platformLogin();
+        microservice.createAlarm();
+        
+        System.exit(1);
+    }
+    
 
-        try {
+    /**
+     * Get some of the environment variables of the container
+     */
+    private void subsetEnvironmentValues () {
+        var env = System.getenv();
+
+        C8Y_ENV.put("app_name", env.get("APPLICATION_NAME"));
+        C8Y_ENV.put("url", env.get("C8Y_BASEURL"));
+        C8Y_ENV.put("jdk", env.get("JAVA_VERSION"));
+        C8Y_ENV.put("tenant", env.get("C8Y_TENANT"));
+        C8Y_ENV.put("user", env.get("C8Y_USER"));
+        C8Y_ENV.put("password", env.get("C8Y_PASSWORD"));
+        C8Y_ENV.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
+        C8Y_ENV.put("memory_limit", env.get("MEMORY_LIMIT"));
+    }
+    
+    
+    private void platformLogin () {
+    	try {
             // Load platform credentials
             loadCredentials();
 
             // Login to the platform
             platform = new PlatformImpl(C8Y_ENV.get("url"), new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
 
-            // Add current user to the environment values
-            var user = platform.getUserApi();
-            var currentUser = user.getCurrentUser();
-            C8Y_ENV.put("username", currentUser.getUserName());
-
-            // Verify if the current user can create alarms
-            var canCreateAlarms = false;
-            for (Object role : currentUser.getEffectiveRoles()) {
-                if (((HashMap) role).get("id").equals("ROLE_ALARM_ADMIN")) {
-                    canCreateAlarms = true;
-                }
-            } 
-
-            // Create a warning alarm
-            if (canCreateAlarms) {
-            	var source = new ManagedObjectRepresentation();
-                source.setId(GId.asGId(trackerId));
-            	
-            	var alarm = new AlarmRepresentation();
-            	alarm.setSeverity("WARNING");
-            	alarm.setSource(source);
-            	alarm.setType("c8y_Application__Microservice_started");
-            	alarm.setText("The microservice " + C8Y_ENV.get("app_name") + " has been started");
-            	alarm.setStatus("ACTIVE");
-            	alarm.setDateTime(new DateTime(System.currentTimeMillis()));
-            	
-                platform.getAlarmApi().create(alarm);
-            }
+           
         } catch (IOException ioe) {
             System.err.println("[ERROR] Unable to load the user credentials!");
         } catch (SDKException sdke) {
@@ -88,24 +84,39 @@ public class App {
             }
         }
     }
+    
+    
 
-    /**
-     * Get the environment variables of the container
-     */
-    private static Map<String, String> getEnvironmentValues () {
-        var env = System.getenv();
-        var map = new HashMap<String, String>();
-
-        map.put("app_name", env.get("APPLICATION_NAME"));
-        map.put("type", "Microservice");
-        map.put("url", env.get("C8Y_BASEURL"));
-        map.put("jdk", env.get("JAVA_VERSION"));
-        map.put("tenant", env.get("C8Y_BOOTSTRAP_TENANT"));
-        map.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
-        map.put("memory", env.get("MEMORY_LIMIT"));
-
-        return map;
+    @SuppressWarnings("rawtypes")
+	private void createAlarm () {
+	    // Get current user from the platform
+	    var currentUser = platform.getUserApi().getCurrentUser();
+	
+	    // Verify if the current user can create alarms
+	    var canCreateAlarms = false;
+	    for (Object role : currentUser.getEffectiveRoles()) {
+	        if (((HashMap) role).get("id").equals("ROLE_ALARM_ADMIN")) {
+	            canCreateAlarms = true;
+	        }
+	    } 
+	
+	    // Create a warning alarm
+	    if (canCreateAlarms) {
+	    	var source = new ManagedObjectRepresentation();
+	        source.setId(GId.asGId(trackerId));
+	    	
+	    	var alarm = new AlarmRepresentation();
+	    	alarm.setSeverity("WARNING");
+	    	alarm.setSource(source);
+	    	alarm.setType("c8y_Application__Microservice_started");
+	    	alarm.setText("The microservice " + C8Y_ENV.get("app_name") + " has been started");
+	    	alarm.setStatus("ACTIVE");
+	    	alarm.setDateTime(new DateTime(System.currentTimeMillis()));
+	    	
+	        platform.getAlarmApi().create(alarm);
+	    }
     }
+    
 
     /**
      * Create a LocationUpdate event based on the client's IP 
