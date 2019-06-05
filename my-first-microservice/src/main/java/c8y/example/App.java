@@ -43,8 +43,6 @@ public class App {
         microservice.subsetEnvironmentValues();
         microservice.platformLogin();
         microservice.createAlarm();
-        
-        System.exit(1);
     }
     
 
@@ -76,8 +74,8 @@ public class App {
 
             // Login to the platform
             platform = new PlatformImpl(C8Y_ENV.get("url"), new CumulocityCredentials(username, password));
-
-        } catch (SDKException sdke) {
+        } 
+    	catch (SDKException sdke) {
             if (sdke.getHttpStatus() == 401) {
                 System.err.println("[ERROR] Security/Unauthorized. Invalid credentials!");
             }
