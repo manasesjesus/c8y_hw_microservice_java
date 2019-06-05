@@ -67,6 +67,9 @@ public class App {
     }
     
     
+    /**
+     * Login into the platform using the environment credentials
+     */
     private void platformLogin () {
     	try {
             // Load platform credentials
@@ -87,6 +90,9 @@ public class App {
     
     
 
+    /**
+     * Create a warning alarm if the current user has permissions
+     */
     @SuppressWarnings("rawtypes")
 	private void createAlarm () {
 	    // Get current user from the platform
