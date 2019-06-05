@@ -32,7 +32,8 @@ public class App {
 
     private Platform platform;
     private Map<String, String> C8Y_ENV = new HashMap<String, String>();
-    private String trackerId = "1400";           // The ID of "My Tracker"
+    private final String trackerId = "<YOUR_TRACKER_ID>";
+    private final String ipstackKey= "<YOUR_IPSTACK_KEY>";
 
 	public static void main (String[] args) {
         SpringApplication.run(App.class, args);
@@ -128,7 +129,7 @@ public class App {
 
         // Get location details from ipstack
         var rest = new RestTemplate();
-        var apiURL = "http://api.ipstack.com/" + ip + "?access_key=" + Credentials.IPSTACK_KEY;
+        var apiURL = "http://api.ipstack.com/" + ip + "?access_key=" + ipstackKey;
         var location = rest.getForObject(apiURL, Location.class);
 
         // Prepare a LocationUpdate event using Cumulocity's API
