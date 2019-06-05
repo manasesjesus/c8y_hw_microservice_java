@@ -1,8 +1,5 @@
 package c8y.example;
 
-import static c8y.example.Credentials.loadCredentials;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,15 +69,13 @@ public class App {
      */
     private void platformLogin () {
     	try {
-            // Load platform credentials
-            loadCredentials();
+    		// Platform credentials
+            var username = C8Y_ENV.get("tenant") + "/" + C8Y_ENV.get("user");
+            var password = C8Y_ENV.get("password");
 
             // Login to the platform
-            platform = new PlatformImpl(C8Y_ENV.get("url"), new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
+            platform = new PlatformImpl(C8Y_ENV.get("url"), new CumulocityCredentials(username, password));
 
-           
-        } catch (IOException ioe) {
-            System.err.println("[ERROR] Unable to load the user credentials!");
         } catch (SDKException sdke) {
             if (sdke.getHttpStatus() == 401) {
                 System.err.println("[ERROR] Security/Unauthorized. Invalid credentials!");
@@ -89,7 +84,6 @@ public class App {
     }
     
     
-
     /**
      * Create a warning alarm if the current user has permissions
      */
@@ -160,6 +154,7 @@ public class App {
         return event;
     }
 
+    
     /* * * * * * * * * * Application endpoints * * * * * * * * * */
 
     // Check the microservice status/health (implemented by default)
