@@ -7,7 +7,6 @@ import java.util.Properties;
 public class Credentials {
     public static String USERNAME;
     public static String PASSWD;
-    public static String URL;
     
     public static String IPSTACK_KEY;
 
@@ -19,7 +18,6 @@ public class Credentials {
         
         USERNAME = props.getProperty("c8y.tenant.id") + "/" + props.getProperty("c8y.user");
         PASSWD   = props.getProperty("c8y.password");
-        URL      = props.getProperty("c8y.url");
         
         IPSTACK_KEY = props.getProperty("ipstack.key");
     }

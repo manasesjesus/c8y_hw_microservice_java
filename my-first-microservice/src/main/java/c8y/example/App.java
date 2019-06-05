@@ -1,8 +1,5 @@
 package c8y.example;
 
-import static c8y.example.Credentials.loadCredentials;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.cumulocity.microservice.autoconfigure.MicroserviceApplication;
 import com.cumulocity.model.authentication.CumulocityCredentials;
 import com.cumulocity.model.idtype.GId;
+import com.cumulocity.rest.representation.alarm.AlarmRepresentation;
 import com.cumulocity.rest.representation.event.EventRepresentation;
 import com.cumulocity.rest.representation.inventory.ManagedObjectRepresentation;
 import com.cumulocity.sdk.client.Platform;
@@ -32,69 +30,92 @@ import net.minidev.json.JSONObject;
 @RestController
 public class App {
 
-    private static Platform platform;
+    private Platform platform;
+    private Map<String, String> C8Y_ENV = new HashMap<String, String>();
+    private final String trackerId = "<YOUR_TRACKER_ID>";
+    private final String ipstackKey= "<YOUR_IPSTACK_KEY>";
 
-    private static Map<String, String> C8Y_ENV = null;
-    private static String trackerId = "1400";           // The ID of "My Tracker"
-
-    @SuppressWarnings("rawtypes")
 	public static void main (String[] args) {
         SpringApplication.run(App.class, args);
 
-        // Load environment values
-        C8Y_ENV = getEnvironmentValues();
+        App microservice = new App();
+        
+        microservice.subsetEnvironmentValues();
+        microservice.platformLogin();
+        microservice.createAlarm();
+    }
+    
 
-        try {
-            // Load platform credentials
-            loadCredentials();
+    /**
+     * Get some of the environment variables of the container
+     */
+    private void subsetEnvironmentValues () {
+        var env = System.getenv();
 
-            // Connect to the platform
-            platform = new PlatformImpl(Credentials.URL, new CumulocityCredentials(Credentials.USERNAME, Credentials.PASSWD));
+        C8Y_ENV.put("app_name", env.get("APPLICATION_NAME"));
+        C8Y_ENV.put("url", env.get("C8Y_BASEURL"));
+        C8Y_ENV.put("jdk", env.get("JAVA_VERSION"));
+        C8Y_ENV.put("tenant", env.get("C8Y_TENANT"));
+        C8Y_ENV.put("user", env.get("C8Y_USER"));
+        C8Y_ENV.put("password", env.get("C8Y_PASSWORD"));
+        C8Y_ENV.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
+        C8Y_ENV.put("memory_limit", env.get("MEMORY_LIMIT"));
+    }
+    
+    
+    /**
+     * Login into the platform using the environment credentials
+     */
+    private void platformLogin () {
+    	try {
+    		// Platform credentials
+            var username = C8Y_ENV.get("tenant") + "/" + C8Y_ENV.get("user");
+            var password = C8Y_ENV.get("password");
 
-            // Add current user to the environment values
-            var user = platform.getUserApi();
-            var currentUser = user.getCurrentUser();
-            C8Y_ENV.put("username", currentUser.getUserName());
-
-            // Verify if the current user can create alarms
-            var canCreateAlarms = false;
-            for (Object role : currentUser.getEffectiveRoles()) {
-                if (((HashMap) role).get("id").equals("ROLE_ALARM_ADMIN")) {
-                    canCreateAlarms = true;
-                }
-            } 
-
-            // TODO: add a subscriptions listener here
-            if (canCreateAlarms) {
-                // Create a WARNING alarm for new subscriptions to the microservice
-            }
-
-        } catch (IOException ioe) {
-            System.err.println("[ERROR] Unable to load the user credentials!");
-        } catch (SDKException sdke) {
+            // Login to the platform
+            platform = new PlatformImpl(C8Y_ENV.get("url"), new CumulocityCredentials(username, password));
+        } 
+    	catch (SDKException sdke) {
             if (sdke.getHttpStatus() == 401) {
                 System.err.println("[ERROR] Security/Unauthorized. Invalid credentials!");
             }
         }
-
     }
-
+    
+    
     /**
-     * Get the environment variables of the container
+     * Create a warning alarm if the current user has permissions
      */
-    private static Map<String, String> getEnvironmentValues () {
-        var env = System.getenv();
-        var map = new HashMap<String, String>();
-
-        map.put("app_name", env.get("APPLICATION_NAME"));
-        map.put("type", "Microservice");
-        map.put("jdk", env.get("JAVA_VERSION"));
-        map.put("tenant", env.get("C8Y_BOOTSTRAP_TENANT"));
-        map.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
-        map.put("memory", env.get("MEMORY_LIMIT"));
-
-        return map;
+    @SuppressWarnings("rawtypes")
+	private void createAlarm () {
+	    // Get current user from the platform
+	    var currentUser = platform.getUserApi().getCurrentUser();
+	
+	    // Verify if the current user can create alarms
+	    var canCreateAlarms = false;
+	    for (Object role : currentUser.getEffectiveRoles()) {
+	        if (((HashMap) role).get("id").equals("ROLE_ALARM_ADMIN")) {
+	            canCreateAlarms = true;
+	        }
+	    } 
+	
+	    // Create a warning alarm
+	    if (canCreateAlarms) {
+	    	var source = new ManagedObjectRepresentation();
+	        source.setId(GId.asGId(trackerId));
+	    	
+	    	var alarm = new AlarmRepresentation();
+	    	alarm.setSeverity("WARNING");
+	    	alarm.setSource(source);
+	    	alarm.setType("c8y_Application__Microservice_started");
+	    	alarm.setText("The microservice " + C8Y_ENV.get("app_name") + " has been started");
+	    	alarm.setStatus("ACTIVE");
+	    	alarm.setDateTime(new DateTime(System.currentTimeMillis()));
+	    	
+	        platform.getAlarmApi().create(alarm);
+	    }
     }
+    
 
     /**
      * Create a LocationUpdate event based on the client's IP 
@@ -106,7 +127,8 @@ public class App {
 
         // Get location details from ipstack
         var rest = new RestTemplate();
-        var location = rest.getForObject("http://api.ipstack.com/" + ip + "?access_key=" + Credentials.IPSTACK_KEY, Location.class);
+        var apiURL = "http://api.ipstack.com/" + ip + "?access_key=" + ipstackKey;
+        var location = rest.getForObject(apiURL, Location.class);
 
         // Prepare a LocationUpdate event using Cumulocity's API
         var c8y_Position = new JSONObject();
@@ -131,6 +153,7 @@ public class App {
         return event;
     }
 
+    
     /* * * * * * * * * * Application endpoints * * * * * * * * * */
 
     // Check the microservice status/health (implemented by default)
