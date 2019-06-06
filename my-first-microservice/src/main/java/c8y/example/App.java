@@ -31,7 +31,7 @@ import net.minidev.json.JSONObject;
 public class App {
 
     private Platform platform;
-    private Map<String, String> C8Y_ENV = new HashMap<String, String>();
+    private Map<String, String> C8Y_ENV = new HashMap<>();
     private final String trackerId = "<YOUR_TRACKER_ID>";
     private final String ipstackKey= "<YOUR_IPSTACK_KEY>";
 
