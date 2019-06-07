@@ -7,6 +7,7 @@
 	"isolation": "PER_TENANT",
 	"requiredRoles": [
 		"ROLE_EVENT_READ",
+		"ROLE_EVENT_ADMIN",
 		"ROLE_ALARM_READ",
 		"ROLE_ALARM_ADMIN"
 	],
