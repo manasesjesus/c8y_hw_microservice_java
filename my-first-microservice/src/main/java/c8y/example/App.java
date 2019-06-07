@@ -136,7 +136,6 @@ public class App {
      * @return The event
      */
     public EventRepresentation createLocationUpdateEvent (String ip) {
-
         // Get location details from ipstack
         var rest = new RestTemplate();
         var apiURL = "http://api.ipstack.com/" + ip + "?access_key=" + ipstackKey;
