@@ -40,7 +40,6 @@ public class App {
 
         App microservice = new App();
         
-        microservice.subsetEnvironmentValues();
         microservice.platformLogin();
         microservice.createAlarm();
     }
@@ -67,6 +66,8 @@ public class App {
      * Login into the platform using the environment credentials
      */
     private void platformLogin () {
+    	subsetEnvironmentValues();
+    	
     	try {
     		// Platform credentials
             var username = C8Y_ENV.get("tenant") + "/" + C8Y_ENV.get("user");
@@ -82,6 +83,17 @@ public class App {
         }
     }
     
+    /**
+     * @return the platform with an authenticated user
+     */
+    private Platform getPlatform () {
+    	if (platform == null) {
+    		platformLogin();
+    	}
+    	
+    	return platform;
+    }
+    
     
     /**
      * Create a warning alarm if the current user has permissions
@@ -89,7 +101,7 @@ public class App {
     @SuppressWarnings("rawtypes")
 	private void createAlarm () {
 	    // Get current user from the platform
-	    var currentUser = platform.getUserApi().getCurrentUser();
+	    var currentUser = getPlatform().getUserApi().getCurrentUser();
 	
 	    // Verify if the current user can create alarms
 	    var canCreateAlarms = false;
@@ -112,7 +124,7 @@ public class App {
 	    	alarm.setStatus("ACTIVE");
 	    	alarm.setDateTime(new DateTime(System.currentTimeMillis()));
 	    	
-	        platform.getAlarmApi().create(alarm);
+	        getPlatform().getAlarmApi().create(alarm);
 	    }
     }
     
@@ -148,7 +160,7 @@ public class App {
         event.setProperty("ip", ip);
         
         // Create the event in the platform
-        platform.getEventApi().create(event);
+        getPlatform().getEventApi().create(event);
 
         return event;
     }
@@ -173,6 +185,9 @@ public class App {
     // Return the environment values
     @RequestMapping("environment")
     public Map<String, String> environment () {
+    	if (C8Y_ENV.isEmpty()) {
+    		subsetEnvironmentValues();
+    	}
         return C8Y_ENV;
     }
 
@@ -188,7 +203,7 @@ public class App {
     public ArrayList<Object> getLocations (@RequestParam(value = "max", defaultValue = "5") int max) {
     	var locations = new ArrayList<Object>();
     	var filter = new EventFilter().byType("c8y_LocationUpdate");
-        var eventCollection = platform.getEventApi().getEventsByFilter(filter).get(max);
+        var eventCollection = getPlatform().getEventApi().getEventsByFilter(filter).get(max);
     	
         eventCollection.getEvents().forEach((event) -> {
         	var map = new HashMap<String, Object>();
