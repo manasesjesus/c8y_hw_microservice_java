@@ -31,7 +31,7 @@ import net.minidev.json.JSONObject;
 public class App {
 
     private Platform platform;
-    private Map<String, String> C8Y_ENV = new HashMap<>();
+    private Map<String, String> c8yEnv = new HashMap<>();
     private final String trackerId = "<YOUR_TRACKER_ID>";
     private final String ipstackKey= "<YOUR_IPSTACK_KEY>";
 
@@ -51,14 +51,14 @@ public class App {
     private void subsetEnvironmentValues () {
         var env = System.getenv();
 
-        C8Y_ENV.put("app_name", env.get("APPLICATION_NAME"));
-        C8Y_ENV.put("url", env.get("C8Y_BASEURL"));
-        C8Y_ENV.put("jdk", env.get("JAVA_VERSION"));
-        C8Y_ENV.put("tenant", env.get("C8Y_TENANT"));
-        C8Y_ENV.put("user", env.get("C8Y_USER"));
-        C8Y_ENV.put("password", env.get("C8Y_PASSWORD"));
-        C8Y_ENV.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
-        C8Y_ENV.put("memory_limit", env.get("MEMORY_LIMIT"));
+        c8yEnv.put("app_name", env.get("APPLICATION_NAME"));
+        c8yEnv.put("url", env.get("C8Y_BASEURL"));
+        c8yEnv.put("jdk", env.get("JAVA_VERSION"));
+        c8yEnv.put("tenant", env.get("C8Y_TENANT"));
+        c8yEnv.put("user", env.get("C8Y_USER"));
+        c8yEnv.put("password", env.get("C8Y_PASSWORD"));
+        c8yEnv.put("isolation", env.get("C8Y_MICROSERVICE_ISOLATION"));
+        c8yEnv.put("memory_limit", env.get("MEMORY_LIMIT"));
     }
     
     
@@ -70,11 +70,11 @@ public class App {
     	
     	try {
     		// Platform credentials
-            var username = C8Y_ENV.get("tenant") + "/" + C8Y_ENV.get("user");
-            var password = C8Y_ENV.get("password");
+            var username = c8yEnv.get("tenant") + "/" + c8yEnv.get("user");
+            var password = c8yEnv.get("password");
 
             // Login to the platform
-            platform = new PlatformImpl(C8Y_ENV.get("url"), new CumulocityCredentials(username, password));
+            platform = new PlatformImpl(c8yEnv.get("url"), new CumulocityCredentials(username, password));
         } 
     	catch (SDKException sdke) {
             if (sdke.getHttpStatus() == 401) {
@@ -120,7 +120,7 @@ public class App {
 	    	alarm.setSeverity("WARNING");
 	    	alarm.setSource(source);
 	    	alarm.setType("c8y_Application__Microservice_started");
-	    	alarm.setText("The microservice " + C8Y_ENV.get("app_name") + " has been started");
+	    	alarm.setText("The microservice " + c8yEnv.get("app_name") + " has been started");
 	    	alarm.setStatus("ACTIVE");
 	    	alarm.setDateTime(new DateTime(System.currentTimeMillis()));
 	    	
@@ -184,10 +184,10 @@ public class App {
     // Return the environment values
     @RequestMapping("environment")
     public Map<String, String> environment () {
-    	if (C8Y_ENV.isEmpty()) {
+    	if (c8yEnv.isEmpty()) {
     		subsetEnvironmentValues();
     	}
-        return C8Y_ENV;
+        return c8yEnv;
     }
 
     // Track client's approximate location
