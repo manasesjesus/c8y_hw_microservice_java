@@ -3,7 +3,7 @@
   <groupId>c8y.example</groupId>
   <packaging>jar</packaging>
   <version>1.0.0-SNAPSHOT</version>
-  <name>my-first-microservice</name>
+  <name>iptracker-microservice</name>
   <artifactId>iptracker-microservice</artifactId>
   <properties>
     <java.version>12</java.version>
@@ -11,7 +11,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <spring-boot-dependencies.version>2.1.4.RELEASE</spring-boot-dependencies.version>
     <c8y.version>9.16.2</c8y.version>
-    <microservice.name>my-first-microservice</microservice.name>
+    <microservice.name>iptracker-microservice</microservice.name>
   </properties>
   <dependencies>
     <dependency>
