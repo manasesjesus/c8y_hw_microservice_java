@@ -4,7 +4,7 @@
   <packaging>jar</packaging>
   <version>1.0.0-SNAPSHOT</version>
   <name>my-first-microservice</name>
-  <artifactId>my-first-microservice</artifactId>
+  <artifactId>iptracker-microservice</artifactId>
   <properties>
     <java.version>12</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
