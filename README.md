@@ -33,6 +33,6 @@ Use the command `mvn clean install` to create a packed Docker microservice as a 
 
 A GET request on <kbd>location/track</kbd> will obtain the client's IP from the request header and use the `createLocationUpdateEvent` method to get the approximate location.
 
-In the Device Management application, navigate to **Devices** > **All devices** and locate the microservice tracker. A map with all locations can be seen under **Tracking**.
+In the Device Management application, navigate to **Devices** > **All devices** and locate the microservice tracker. A map with the tracked locations can be seen under **Tracking**.
 
 ![Microservice tracking](ms-tracking-map.png)
