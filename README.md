@@ -20,7 +20,7 @@ It also uses the Cumulocity UI to display the tracked locations on a map.
 *    A managed object (device ID) in Cumulocity.
 *    A key from [ipstack](https://ipstack.com).
 
-### Setup
+### Setup
 
 Set the device ID and ipstack key in the manifest file (_cumulocity.json_).<br>
 For more details, review the full tutorial of the [Java microservice](https://cumulocity.com/guides/microservice-sdk/http/#microservice-java) in the online guides.
