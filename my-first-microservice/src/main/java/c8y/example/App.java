@@ -169,8 +169,8 @@ public class App {
 	// Get the tracked IPs and locations
 	@RequestMapping("location/locations")
 	public ArrayList<Object> getLocations (@RequestParam(value = "max", defaultValue = "5") int max) {
-		var locations = new ArrayList<Object>();
 		var filter = new EventFilter().byType("c8y_LocationUpdate");
+		var locations = new ArrayList<Object>();
 		var eventCollection = platform.getEventApi().getEventsByFilter(filter).get(max);
 
 		eventCollection.getEvents().forEach((event) -> {
