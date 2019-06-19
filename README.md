@@ -5,20 +5,20 @@
 Microservice developed using Java 12, Spring Boot 2 and Docker.
 It creates a warning alarm message (for demonstration purposes) and it exposes endpoints to:
 
-*    Verify if the microservice is up and running.
-*    Pass a parameter to the platform and return a formatted string.
-*    Get some of the environment variables and the microservice service settings.
-*    Track a user's approximate location and store it in the platform.
-*    Get the tracked IPs and locations.
+*   Verify if the microservice is up and running.
+*   Pass a parameter to the platform and return a formatted string.
+*   Get some of the environment variables and the microservice service settings.
+*   Track a user's approximate location and store it in the platform.
+*   Get the tracked IPs and locations.
 
 It also uses the Cumulocity UI to display the tracked locations on a map.
 
 ### Prerequisites
 
-*    Cumulocity credentials (tenant, user and password). Create a free trial at the [Cumulocity IoT](https://cumulocity.com/) website.
-*    Docker local installation.
-*    A managed object (device ID) in Cumulocity.
-*    A key from [ipstack](https://ipstack.com).
+*   Cumulocity credentials (tenant, user and password). Create a free trial at the [Cumulocity IoT](https://cumulocity.com/) website.
+*   Docker local installation.
+*   A managed object (device ID) in Cumulocity.
+*   A key from [ipstack](https://ipstack.com).
 
 ### Setup
 
