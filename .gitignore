@@ -21,3 +21,6 @@ credentials.properties
 .classpath
 commands.sh
 node_modules/
+
+# IDE files
+.idea/
