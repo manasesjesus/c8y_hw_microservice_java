@@ -77,7 +77,6 @@ public class App {
 	
 	/**
 	 * Create a warning alarm on microservice subscription
-	 * 
 	 */
 	@EventListener(MicroserviceSubscriptionAddedEvent.class)
 	public void createAlarm (MicroserviceSubscriptionAddedEvent event) {
@@ -159,7 +158,7 @@ public class App {
 		return c8yEnv;
 	}
 
-	// Track client's approximate location
+	// Track the client's approximate location
 	@RequestMapping("location/track")
 	public String trackLocation (HttpServletRequest request) {
 		// Get the public IP address and create the event
