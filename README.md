@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cde81efa69e5441eba00cd725d9c7bcd)](https://app.codacy.com/app/manasesjesus/c8y_hw_microservice_java?utm_source=github.com&utm_medium=referral&utm_content=manasesjesus/c8y_hw_microservice_java&utm_campaign=Badge_Grade_Dashboard)
 
-Microservice developed using Java 12, Spring Boot 2 and Docker.
+Microservice developed using Java 13, Spring Boot 2 and Docker.
 It creates a warning alarm message (for demonstration purposes) and it exposes endpoints to:
 
 *   Verify if the microservice is up and running.
