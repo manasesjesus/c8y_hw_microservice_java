@@ -1,4 +1,4 @@
-## Cumulocity Microservice
+## Cumulocity IoT Microservice
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cde81efa69e5441eba00cd725d9c7bcd)](https://app.codacy.com/app/manasesjesus/c8y_hw_microservice_java?utm_source=github.com&utm_medium=referral&utm_content=manasesjesus/c8y_hw_microservice_java&utm_campaign=Badge_Grade_Dashboard)
 
@@ -11,13 +11,13 @@ It creates a warning alarm message (for demonstration purposes) and it exposes e
 *   Track a user's approximate location and store it in the platform.
 *   Get the tracked IPs and locations.
 
-It also uses the Cumulocity UI to display the tracked locations on a map.
+It also uses the Cumulocity IoT UI to display the tracked locations on a map.
 
 ### Prerequisites
 
-*   Cumulocity credentials (tenant, user and password). Create a free trial at the [Cumulocity IoT](https://cumulocity.com/) website.
+*   Cumulocity IoT credentials (tenant, user and password). Create a free trial at the [Cumulocity IoT](https://cumulocity.com/) website.
 *   Docker local installation.
-*   A managed object (device ID) in Cumulocity.
+*   A managed object (device ID) in Cumulocity IoT.
 *   A key from [ipstack](https://ipstack.com).
 
 ### Setup
@@ -27,7 +27,7 @@ For more details, review the full tutorial of the [Java microservice](https://cu
 
 ### Build and deploy
 
-Use the command `mvn clean install` to create a packed Docker microservice as a ZIP file and upload it to the Cumulocity platform. For more details about uploading a microservice ZIP file, refer to [Managing applications > Adding own applications](/guides/users-guide/administration#adding-applications) under the Administration section in the User guide.
+Use the command `mvn clean install` to create a packed Docker microservice as a ZIP file and upload it to the Cumulocity IoT platform. For more details about uploading a microservice ZIP file, refer to [Managing applications > Adding own applications](/guides/users-guide/administration#adding-applications) under the Administration section in the User guide.
 
 ### Execution
 
